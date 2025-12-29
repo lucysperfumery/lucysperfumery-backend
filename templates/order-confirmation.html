@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmation - Lucy's Perfumery</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #ffffff;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 300;
+    }
+    .content {
+      padding: 30px 20px;
+    }
+    .greeting {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    .message {
+      background-color: #f0f7ff;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      margin-bottom: 25px;
+      border-radius: 4px;
+    }
+    .order-details {
+      margin: 25px 0;
+    }
+    .order-info {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .order-info:last-child {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: 600;
+      color: #555;
+    }
+    .value {
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th {
+      background-color: #667eea;
+      color: white;
+      padding: 12px 10px;
+      text-align: left;
+      font-weight: 500;
+    }
+    th:nth-child(2), th:nth-child(3), th:nth-child(4) {
+      text-align: center;
+    }
+    th:nth-child(4) {
+      text-align: right;
+    }
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .total-row {
+      background-color: #f9f9f9;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .total-row td {
+      padding: 15px 10px;
+      border-top: 2px solid #667eea;
+      border-bottom: none;
+    }
+    .footer {
+      background-color: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+    }
+    .footer p {
+      margin: 5px 0;
+    }
+    .social-links {
+      margin: 15px 0;
+    }
+    .social-links a {
+      color: #667eea;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, #ddd, transparent);
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><8 Lucy's Perfumery</h1>
+      <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;">Order Confirmation</p>
+    </div>
+
+    <div class="content">
+      <div class="greeting">
+        Hello {{customerName}},
+      </div>
+
+      <div class="message">
+        <p style="margin: 0;">
+          Thank you for your order! We're excited to prepare your fragrances for you.
+          Your order has been confirmed and we'll notify you once it's ready for pickup or delivery.
+        </p>
+      </div>
+
+      <div class="order-details">
+        <h2 style="color: #667eea; margin-bottom: 15px;">Order Details</h2>
+        <div class="order-info">
+          <span class="label">Order ID:</span>
+          <span class="value">{{orderId}}</span>
+        </div>
+        <div class="order-info">
+          <span class="label">Order Date:</span>
+          <span class="value">{{orderDate}}</span>
+        </div>
+        <div class="order-info">
+          <span class="label">Status:</span>
+          <span class="value" style="color: #28a745; font-weight: 600;">Confirmed</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 style="color: #667eea; margin-bottom: 15px;">Items Ordered</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{itemsList}}
+          <tr class="total-row">
+            <td colspan="3" style="text-align: right;">Total Amount:</td>
+            <td style="text-align: right; color: #667eea;">{{currency}} {{totalAmount}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="divider"></div>
+
+      <div style="background-color: #fff9e6; border-left: 4px solid #ffc107; padding: 15px; border-radius: 4px; margin-top: 20px;">
+        <p style="margin: 0; font-size: 14px;">
+          <strong>What's Next?</strong><br>
+          We'll process your order and reach out to you shortly with delivery or pickup details.
+          If you have any questions, feel free to contact us.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p><strong>Lucy's Perfumery</strong></p>
+      <p>Your destination for exquisite fragrances</p>
+      <div class="social-links">
+        <a href="mailto:{{GMAIL_USER}}">Email Us</a>
+      </div>
+      <p style="font-size: 12px; color: #999; margin-top: 15px;">
+        This is an automated email. Please do not reply directly to this message.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
