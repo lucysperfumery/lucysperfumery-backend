@@ -77,8 +77,6 @@ const createOrder = async (req, res) => {
 
     // Verify amount matches (convert to kobo/pesewas for comparison)
     const expectedAmount = totalAmount;
-    console.log("Expected Amount (in pesewas):", expectedAmount);
-    console.log("Payment Amount (in pesewas):", paymentResult.data.amount);
     if (paymentResult.data.amount !== expectedAmount) {
       return res.status(400).json({
         success: false,
