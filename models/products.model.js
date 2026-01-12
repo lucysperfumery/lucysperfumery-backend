@@ -19,11 +19,6 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please specify a category"],
     },
-    brand: {
-      type: String,
-      required: [true, "Please specify a brand"],
-      trim: true,
-    },
     image: {
       type: String,
       default: "no-image.jpg",

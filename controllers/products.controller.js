@@ -11,7 +11,6 @@ const createProduct = async (req, res) => {
       name,
       description,
       price,
-      brand,
       category,
       stock,
       isActive,
@@ -71,7 +70,6 @@ const createProduct = async (req, res) => {
       name: name.trim(),
       description: description.trim(),
       price,
-      brand,
       category: category.trim(),
       image: imageUrl,
       stock: stock !== undefined ? stock : 0,
@@ -201,7 +199,7 @@ const getProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, price, category, brand, stock, isActive } =
+    const { name, description, price, category, stock, isActive } =
       req.body;
 
     // Check if product exists
@@ -246,7 +244,6 @@ const updateProduct = async (req, res) => {
     if (description) product.description = description.trim();
     if (price !== undefined) product.price = price;
     if (category) product.category = category.trim();
-    if (brand) product.brand = brand.trim();
     if (stock !== undefined) product.stock = stock;
     if (isActive !== undefined) product.isActive = isActive;
 
