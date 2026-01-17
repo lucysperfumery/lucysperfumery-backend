@@ -106,17 +106,40 @@ const createOrder = async (req, res) => {
       try {
         const product = await Product.findById(item.productId);
         if (product) {
-          // Check if sufficient stock is available
-          if (product.stock >= item.quantity) {
-            product.stock -= item.quantity;
-            await product.save();
-            console.log(
-              `Stock reduced for product ${product.name}: ${item.quantity} units`
-            );
+          // Check if item has selected option (variant)
+          if (item.selectedOption && item.selectedOption.optionId) {
+            // Reduce stock for specific variant
+            const option = product.options.id(item.selectedOption.optionId);
+            if (option) {
+              if (option.stock >= item.quantity) {
+                option.stock -= item.quantity;
+                await product.save();
+                console.log(
+                  `Stock reduced for product ${product.name} (${option.name}): ${item.quantity} units`
+                );
+              } else {
+                console.warn(
+                  `Insufficient stock for product ${product.name} (${option.name}). Available: ${option.stock}, Ordered: ${item.quantity}`
+                );
+              }
+            } else {
+              console.warn(
+                `Option not found for product ${product.name}: ${item.selectedOption.optionId}`
+              );
+            }
           } else {
-            console.warn(
-              `Insufficient stock for product ${product.name}. Available: ${product.stock}, Ordered: ${item.quantity}`
-            );
+            // Reduce stock for product without options (base stock)
+            if (product.stock >= item.quantity) {
+              product.stock -= item.quantity;
+              await product.save();
+              console.log(
+                `Stock reduced for product ${product.name}: ${item.quantity} units`
+              );
+            } else {
+              console.warn(
+                `Insufficient stock for product ${product.name}. Available: ${product.stock}, Ordered: ${item.quantity}`
+              );
+            }
           }
         } else {
           console.warn(`Product not found: ${item.productId}`);
@@ -256,17 +279,40 @@ const verifyPayment = async (req, res) => {
       try {
         const product = await Product.findById(item.productId);
         if (product) {
-          // Check if sufficient stock is available
-          if (product.stock >= item.quantity) {
-            product.stock -= item.quantity;
-            await product.save();
-            console.log(
-              `Stock reduced for product ${product.name}: ${item.quantity} units`
-            );
+          // Check if item has selected option (variant)
+          if (item.selectedOption && item.selectedOption.optionId) {
+            // Reduce stock for specific variant
+            const option = product.options.id(item.selectedOption.optionId);
+            if (option) {
+              if (option.stock >= item.quantity) {
+                option.stock -= item.quantity;
+                await product.save();
+                console.log(
+                  `Stock reduced for product ${product.name} (${option.name}): ${item.quantity} units`
+                );
+              } else {
+                console.warn(
+                  `Insufficient stock for product ${product.name} (${option.name}). Available: ${option.stock}, Ordered: ${item.quantity}`
+                );
+              }
+            } else {
+              console.warn(
+                `Option not found for product ${product.name}: ${item.selectedOption.optionId}`
+              );
+            }
           } else {
-            console.warn(
-              `Insufficient stock for product ${product.name}. Available: ${product.stock}, Ordered: ${item.quantity}`
-            );
+            // Reduce stock for product without options (base stock)
+            if (product.stock >= item.quantity) {
+              product.stock -= item.quantity;
+              await product.save();
+              console.log(
+                `Stock reduced for product ${product.name}: ${item.quantity} units`
+              );
+            } else {
+              console.warn(
+                `Insufficient stock for product ${product.name}. Available: ${product.stock}, Ordered: ${item.quantity}`
+              );
+            }
           }
         } else {
           console.warn(`Product not found: ${item.productId}`);

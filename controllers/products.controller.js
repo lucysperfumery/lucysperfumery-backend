@@ -14,6 +14,7 @@ const createProduct = async (req, res) => {
       category,
       stock,
       isActive,
+      options,
     } = req.body;
 
     // Validate required fields
@@ -31,13 +32,6 @@ const createProduct = async (req, res) => {
       });
     }
 
-    if (!price || price <= 0) {
-      return res.status(400).json({
-        success: false,
-        error: "Price must be greater than 0",
-      });
-    }
-
     if (!category || !category.trim()) {
       return res.status(400).json({
         success: false,
@@ -45,11 +39,58 @@ const createProduct = async (req, res) => {
       });
     }
 
-    if (stock !== undefined && stock < 0) {
-      return res.status(400).json({
-        success: false,
-        error: "Stock cannot be negative",
-      });
+    // Parse options if sent as string (from FormData)
+    let parsedOptions = [];
+    if (options) {
+      try {
+        parsedOptions = typeof options === "string" ? JSON.parse(options) : options;
+      } catch (e) {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid options format",
+        });
+      }
+    }
+
+    // Validate: product must have either base price/stock OR options
+    const hasOptions = parsedOptions && parsedOptions.length > 0;
+
+    if (!hasOptions) {
+      // Product without options - require base price and stock
+      if (!price || price <= 0) {
+        return res.status(400).json({
+          success: false,
+          error: "Price must be greater than 0",
+        });
+      }
+      if (stock !== undefined && stock < 0) {
+        return res.status(400).json({
+          success: false,
+          error: "Stock cannot be negative",
+        });
+      }
+    } else {
+      // Product with options - validate each option
+      for (const option of parsedOptions) {
+        if (!option.name || !option.name.trim()) {
+          return res.status(400).json({
+            success: false,
+            error: "Each option must have a name",
+          });
+        }
+        if (!option.price || option.price <= 0) {
+          return res.status(400).json({
+            success: false,
+            error: "Each option must have a price greater than 0",
+          });
+        }
+        if (option.stock !== undefined && option.stock < 0) {
+          return res.status(400).json({
+            success: false,
+            error: "Option stock cannot be negative",
+          });
+        }
+      }
     }
 
     // Upload image to Cloudinary BEFORE creating product
@@ -66,15 +107,21 @@ const createProduct = async (req, res) => {
     }
 
     // Create product with Cloudinary URL
-    const product = await Product.create({
+    const productData = {
       name: name.trim(),
       description: description.trim(),
-      price,
+      price: hasOptions ? 0 : price,
       category: category.trim(),
       image: imageUrl,
-      stock: stock !== undefined ? stock : 0,
+      stock: hasOptions ? 0 : (stock !== undefined ? stock : 0),
       isActive: isActive !== undefined ? isActive : true,
-    });
+    };
+
+    if (hasOptions) {
+      productData.options = parsedOptions;
+    }
+
+    const product = await Product.create(productData);
 
     res.status(201).json({
       success: true,
@@ -199,7 +246,7 @@ const getProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, price, category, stock, isActive } =
+    const { name, description, price, category, stock, isActive, options } =
       req.body;
 
     // Check if product exists
@@ -211,19 +258,62 @@ const updateProduct = async (req, res) => {
       });
     }
 
-    // Validate updates
-    if (price !== undefined && price <= 0) {
-      return res.status(400).json({
-        success: false,
-        error: "Price must be greater than 0",
-      });
+    // Parse options if sent as string (from FormData)
+    let parsedOptions = null;
+    if (options !== undefined) {
+      try {
+        parsedOptions = typeof options === "string" ? JSON.parse(options) : options;
+      } catch (e) {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid options format",
+        });
+      }
     }
 
-    if (stock !== undefined && stock < 0) {
-      return res.status(400).json({
-        success: false,
-        error: "Stock cannot be negative",
-      });
+    // Determine if product has options (use new value if provided, else use existing)
+    const hasOptions = parsedOptions !== null
+      ? (parsedOptions && parsedOptions.length > 0)
+      : (product.options && product.options.length > 0);
+
+    // Validate options if provided
+    if (parsedOptions && parsedOptions.length > 0) {
+      for (const option of parsedOptions) {
+        if (!option.name || !option.name.trim()) {
+          return res.status(400).json({
+            success: false,
+            error: "Each option must have a name",
+          });
+        }
+        if (!option.price || option.price <= 0) {
+          return res.status(400).json({
+            success: false,
+            error: "Each option must have a price greater than 0",
+          });
+        }
+        if (option.stock !== undefined && option.stock < 0) {
+          return res.status(400).json({
+            success: false,
+            error: "Option stock cannot be negative",
+          });
+        }
+      }
+    }
+
+    // Validate base price/stock if no options
+    if (!hasOptions) {
+      if (price !== undefined && price <= 0) {
+        return res.status(400).json({
+          success: false,
+          error: "Price must be greater than 0",
+        });
+      }
+      if (stock !== undefined && stock < 0) {
+        return res.status(400).json({
+          success: false,
+          error: "Stock cannot be negative",
+        });
+      }
     }
 
     // Upload new image to Cloudinary BEFORE updating product
@@ -242,10 +332,23 @@ const updateProduct = async (req, res) => {
     // Update fields
     if (name) product.name = name.trim();
     if (description) product.description = description.trim();
-    if (price !== undefined) product.price = price;
     if (category) product.category = category.trim();
-    if (stock !== undefined) product.stock = stock;
     if (isActive !== undefined) product.isActive = isActive;
+
+    // Update options or base price/stock
+    if (parsedOptions !== null) {
+      product.options = parsedOptions;
+      if (parsedOptions.length > 0) {
+        product.price = 0;
+        product.stock = 0;
+      }
+    }
+
+    // Only update base price/stock if product doesn't have options
+    if (!hasOptions) {
+      if (price !== undefined) product.price = price;
+      if (stock !== undefined) product.stock = stock;
+    }
 
     await product.save();
 

@@ -32,8 +32,41 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    options: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+        stock: {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+        sku: {
+          type: String,
+        },
+        isActive: {
+          type: Boolean,
+          default: true,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
+
+// Virtual property to check if product has options
+productSchema.virtual("hasOptions").get(function () {
+  return this.options && this.options.length > 0;
+});
+
+// Ensure virtuals are included in JSON output
+productSchema.set("toJSON", { virtuals: true });
+productSchema.set("toObject", { virtuals: true });
 
 module.exports = mongoose.model("Product", productSchema);

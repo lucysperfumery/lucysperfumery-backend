@@ -19,6 +19,11 @@ const orderSchema = new mongoose.Schema(
         name: { type: String, required: true },
         quantity: { type: Number, required: true },
         price: { type: Number, required: true },
+        selectedOption: {
+          optionId: { type: String },
+          optionName: { type: String },
+          optionPrice: { type: Number },
+        },
       },
     ],
     totalAmount: { type: Number, required: true },
