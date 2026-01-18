@@ -1,10 +1,10 @@
-const nodemailer = require('nodemailer');
-const fs = require('fs');
-const path = require('path');
+const nodemailer = require("nodemailer");
+const fs = require("fs");
+const path = require("path");
 
 // Create transporter for Gmail SMTP
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD,
@@ -18,12 +18,17 @@ const transporter = nodemailer.createTransport({
  * @returns {string} Populated HTML content
  */
 const loadTemplate = (templateName, data) => {
-  const templatePath = path.join(__dirname, '..', 'templates', `${templateName}.html`);
-  let html = fs.readFileSync(templatePath, 'utf8');
+  const templatePath = path.join(
+    __dirname,
+    "..",
+    "templates",
+    `${templateName}.html`,
+  );
+  let html = fs.readFileSync(templatePath, "utf8");
 
   // Replace placeholders with actual data
   Object.keys(data).forEach((key) => {
-    const regex = new RegExp(`{{${key}}}`, 'g');
+    const regex = new RegExp(`{{${key}}}`, "g");
     html = html.replace(regex, data[key]);
   });
 
@@ -45,9 +50,9 @@ const formatItemsList = (items) => {
       <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">GHS ${item.price.toFixed(2)}</td>
       <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">GHS ${(item.quantity * item.price).toFixed(2)}</td>
     </tr>
-  `
+  `,
     )
-    .join('');
+    .join("");
 };
 
 /**
@@ -58,21 +63,25 @@ const formatItemsList = (items) => {
 const sendOrderConfirmation = async (orderData) => {
   try {
     const itemsList = formatItemsList(orderData.items);
-    const orderDate = new Date(orderData.createdAt).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    const orderDate = new Date(orderData.createdAt).toLocaleDateString(
+      "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      },
+    );
 
-    const html = loadTemplate('order-confirmation', {
+    const html = loadTemplate("order-confirmation", {
       customerName: orderData.customer.name,
       orderId: orderData.orderNumber,
       orderDate: orderDate,
       itemsList: itemsList,
       totalAmount: orderData.totalAmount.toFixed(2),
       currency: orderData.currency,
+      logoUrl: `https://www.lucysperfumery.com/lp_logo.png`,
     });
 
     const mailOptions = {
@@ -83,11 +92,11 @@ const sendOrderConfirmation = async (orderData) => {
     };
 
     const result = await transporter.sendMail(mailOptions);
-    console.log('Order confirmation email sent:', result.messageId);
+    console.log("Order confirmation email sent:", result.messageId);
     return { success: true, messageId: result.messageId };
   } catch (error) {
-    console.error('Error sending order confirmation email:', error);
-    throw new Error('Failed to send order confirmation email');
+    console.error("Error sending order confirmation email:", error);
+    throw new Error("Failed to send order confirmation email");
   }
 };
 
@@ -99,15 +108,18 @@ const sendOrderConfirmation = async (orderData) => {
 const sendNewOrderAlert = async (orderData) => {
   try {
     const itemsList = formatItemsList(orderData.items);
-    const orderDate = new Date(orderData.createdAt).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    const orderDate = new Date(orderData.createdAt).toLocaleDateString(
+      "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      },
+    );
 
-    const html = loadTemplate('new-order', {
+    const html = loadTemplate("new-order", {
       orderId: orderData.orderNumber,
       orderDate: orderDate,
       customerName: orderData.customer.name,
@@ -117,21 +129,22 @@ const sendNewOrderAlert = async (orderData) => {
       totalAmount: orderData.totalAmount.toFixed(2),
       currency: orderData.currency,
       paystackReference: orderData.paystackReference,
+      logoUrl: `https://www.lucysperfumery.com/lp_logo.png`,
     });
 
     const mailOptions = {
       from: `"Lucy's Perfumery System" <${process.env.GMAIL_USER}>`,
       to: process.env.OWNER_EMAIL,
-      subject: `=� New Order Received - ${orderData.orderNumber}`,
+      subject: `New Order Received - ${orderData.orderNumber}`,
       html: html,
     };
 
     const result = await transporter.sendMail(mailOptions);
-    console.log('New order alert email sent to owner:', result.messageId);
+    console.log("New order alert email sent to owner:", result.messageId);
     return { success: true, messageId: result.messageId };
   } catch (error) {
-    console.error('Error sending new order alert email:', error);
-    throw new Error('Failed to send new order alert email');
+    console.error("Error sending new order alert email:", error);
+    throw new Error("Failed to send new order alert email");
   }
 };
 

@@ -1,250 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Order Alert - Lucy's Perfumery</title>
+  <title>New Order Alert</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
-      color: #333;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.5;
+      color: #1a1a1a;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
+      background-color: #ffffff;
     }
+
     .container {
-      max-width: 700px;
-      margin: 20px auto;
-      background: #ffffff;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      max-width: 650px;
+      margin: 0 auto;
+      border: 1px solid #e5e5e5;
     }
+
     .header {
-      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      background-color: #D91B5C;
       color: #ffffff;
-      padding: 30px 20px;
-      text-align: center;
+      padding: 40px 30px;
+      text-align: left;
     }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 5px;
+    }
+
     .header h1 {
       margin: 0;
-      font-size: 28px;
-      font-weight: 300;
+      font-size: 24px;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
     }
-    .alert-badge {
-      display: inline-block;
-      background-color: #ffc107;
-      color: #000;
-      padding: 5px 15px;
-      border-radius: 20px;
+
+    .status-bar {
+      background-color: #22c55e;
+      color: #ffffff;
+      padding: 12px 30px;
       font-size: 12px;
-      font-weight: 600;
-      margin-top: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
     }
+
     .content {
-      padding: 30px 20px;
+      padding: 40px 30px;
     }
-    .alert-message {
-      background-color: #d4edda;
-      border-left: 4px solid #28a745;
-      padding: 15px;
-      margin-bottom: 25px;
-      border-radius: 4px;
-      font-size: 16px;
-    }
+
     .section {
-      margin: 25px 0;
-      padding: 20px;
-      background-color: #f8f9fa;
-      border-radius: 6px;
+      margin-bottom: 40px;
     }
+
     .section-title {
-      color: #28a745;
-      margin-top: 0;
-      margin-bottom: 15px;
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #71717a;
+      border-bottom: 1px solid #e5e5e5;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
     }
-    .info-grid {
-      display: grid;
-      grid-template-columns: 140px 1fr;
-      gap: 10px;
-      margin-bottom: 10px;
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
     }
+
     .label {
-      font-weight: 600;
-      color: #555;
+      color: #71717a;
     }
+
     .value {
-      color: #333;
+      font-weight: 600;
+      text-align: right;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 20px 0;
-      background-color: white;
+      margin-top: 10px;
     }
+
     th {
-      background-color: #28a745;
-      color: white;
-      padding: 12px 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #71717a;
       text-align: left;
-      font-weight: 500;
+      padding: 10px 0;
+      border-bottom: 1px solid #e5e5e5;
     }
-    th:nth-child(2), th:nth-child(3), th:nth-child(4) {
-      text-align: center;
-    }
-    th:nth-child(4) {
-      text-align: right;
-    }
+
     td {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
+      padding: 15px 0;
+      border-bottom: 1px solid #f4f4f5;
+      font-size: 14px;
     }
-    .total-row {
-      background-color: #f9f9f9;
-      font-weight: 600;
-      font-size: 16px;
-    }
+
     .total-row td {
-      padding: 15px 10px;
-      border-top: 2px solid #28a745;
       border-bottom: none;
+      padding-top: 25px;
+      font-weight: 700;
+      font-size: 18px;
     }
-    .action-buttons {
-      margin: 25px 0;
-      text-align: center;
+
+    .button-group {
+      margin-top: 40px;
     }
+
     .button {
       display: inline-block;
-      padding: 12px 30px;
-      background-color: #28a745;
-      color: white;
+      padding: 15px 25px;
+      background-color: #D91B5C;
+      color: #ffffff;
       text-decoration: none;
-      border-radius: 5px;
-      font-weight: 600;
-      margin: 5px;
-    }
-    .button:hover {
-      background-color: #218838;
-    }
-    .footer {
-      background-color: #f9f9f9;
-      padding: 20px;
-      text-align: center;
       font-size: 14px;
-      color: #777;
-    }
-    .footer p {
-      margin: 5px 0;
-    }
-    .divider {
-      height: 1px;
-      background: linear-gradient(to right, transparent, #ddd, transparent);
-      margin: 20px 0;
-    }
-    .highlight {
-      background-color: #fff3cd;
-      padding: 2px 6px;
-      border-radius: 3px;
       font-weight: 600;
+      margin-right: 10px;
+      border: 1px solid #D91B5C;
+    }
+
+    .button-secondary {
+      background-color: #ffffff;
+      color: #3D1F5C;
+      border: 1px solid #3D1F5C;
+    }
+
+    .footer {
+      padding: 30px;
+      background-color: #f5f3f7;
+      font-size: 12px;
+      color: #71717a;
+      text-align: left;
+    }
+
+    .next-steps {
+      background-color: #f5f3f7;
+      padding: 20px;
+      font-size: 14px;
+      border-left: 3px solid #D91B5C;
     }
   </style>
 </head>
+
 <body>
   <div class="container">
+    <div class="status-bar">PAID & CONFIRMED</div>
     <div class="header">
-      <h1>=� New Order Received!</h1>
-      <div class="alert-badge">ACTION REQUIRED</div>
+      <div class="header-content">
+        <img src="https://www.lucysperfumery.com/lp_logo.png" alt="Lucy's Perfumery" class="logo">
+        <h1>New Order #{{orderId}}</h1>
+      </div>
     </div>
 
     <div class="content">
-      <div class="alert-message">
-        <strong>A new order has been placed on your website!</strong><br>
-        Order ID: <span class="highlight">{{orderId}}</span> | Time: {{orderDate}}
-      </div>
-
       <div class="section">
-        <h2 class="section-title">Customer Information</h2>
-        <div class="info-grid">
-          <span class="label">Name:</span>
+        <h2 class="section-title">Customer Details</h2>
+        <div class="info-row">
+          <span class="label">Name</span>
           <span class="value">{{customerName}}</span>
         </div>
-        <div class="info-grid">
-          <span class="label">Email:</span>
-          <span class="value"><a href="mailto:{{customerEmail}}" style="color: #28a745;">{{customerEmail}}</a></span>
+        <div class="info-row">
+          <span class="label">Email</span>
+          <span class="value">{{customerEmail}}</span>
         </div>
-        <div class="info-grid">
-          <span class="label">Phone:</span>
-          <span class="value"><a href="tel:{{customerPhone}}" style="color: #28a745;">{{customerPhone}}</a></span>
+        <div class="info-row">
+          <span class="label">Phone</span>
+          <span class="value">{{customerPhone}}</span>
         </div>
       </div>
 
       <div class="section">
-        <h2 class="section-title">Order Details</h2>
-        <div class="info-grid">
-          <span class="label">Order ID:</span>
-          <span class="value">{{orderId}}</span>
-        </div>
-        <div class="info-grid">
-          <span class="label">Order Date:</span>
+        <h2 class="section-title">Order Info</h2>
+        <div class="info-row">
+          <span class="label">Date</span>
           <span class="value">{{orderDate}}</span>
         </div>
-        <div class="info-grid">
-          <span class="label">Payment Ref:</span>
+        <div class="info-row">
+          <span class="label">Payment Ref</span>
           <span class="value">{{paystackReference}}</span>
         </div>
-        <div class="info-grid">
-          <span class="label">Status:</span>
-          <span class="value" style="color: #28a745; font-weight: 600;"> PAID & CONFIRMED</span>
-        </div>
       </div>
 
-      <div class="divider"></div>
-
-      <h3 style="color: #28a745; margin-bottom: 15px;">Items Ordered</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{itemsList}}
-          <tr class="total-row">
-            <td colspan="3" style="text-align: right;">Total Amount:</td>
-            <td style="text-align: right; color: #28a745;">{{currency}} {{totalAmount}}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="divider"></div>
-
-      <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 4px; margin-top: 20px;">
-        <p style="margin: 0; font-size: 14px;">
-          <strong>� Next Steps:</strong><br>
-          1. Contact the customer to confirm delivery/pickup details<br>
-          2. Prepare the order for packaging<br>
-          3. Arrange delivery or notify customer when ready for pickup
-        </p>
+      <div class="section">
+        <h2 class="section-title">Line Items</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th style="text-align: center;">Qty</th>
+              <th style="text-align: right;">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{itemsList}}
+            <tr class="total-row">
+              <td colspan="2" style="text-align: right; padding-right: 20px;">Total Amount</td>
+              <td style="text-align: right;">{{currency}} {{totalAmount}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <div class="action-buttons">
-        <a href="mailto:{{customerEmail}}" class="button">=� Email Customer</a>
-        <a href="tel:{{customerPhone}}" class="button">=� Call Customer</a>
+      <div class="next-steps">
+        <strong style="display: block; margin-bottom: 10px; font-size: 12px; text-transform: uppercase;">Next
+          Steps</strong>
+        <ul style="margin: 0; padding-left: 18px; color: #3f3f46;">
+          <li>Contact customer for delivery confirmation</li>
+          <li>Prepare packaging</li>
+          <li>Assign courier</li>
+        </ul>
+      </div>
+
+      <div class="button-group">
+        <a href="mailto:{{customerEmail}}" class="button">Contact Customer</a>
+        <a href="tel:{{customerPhone}}" class="button button-secondary">Call Phone</a>
       </div>
     </div>
 
     <div class="footer">
-      <p><strong>Lucy's Perfumery - Admin Notification</strong></p>
-      <p style="font-size: 12px; color: #999; margin-top: 15px;">
-        This is an automated notification from your e-commerce system.
-      </p>
+      <strong>Lucy's Perfumery</strong><br>
+      Admin Internal Notification • {{orderDate}}
     </div>
   </div>
 </body>
+
 </html>
