@@ -62,6 +62,21 @@ const formatItemsList = (items) => {
  */
 const sendOrderConfirmation = async (orderData) => {
   try {
+    // Skip sending if no email provided or if using default email
+    if (
+      !orderData.customer.email ||
+      orderData.customer.email === "lucysperfumery@gmail.com"
+    ) {
+      console.log(
+        "Skipping customer confirmation email - no personal email provided",
+      );
+      return {
+        success: true,
+        skipped: true,
+        message: "No personal email provided",
+      };
+    }
+
     const itemsList = formatItemsList(orderData.items);
     const orderDate = new Date(orderData.createdAt).toLocaleDateString(
       "en-US",

@@ -22,10 +22,10 @@ const createOrder = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!customer || !customer.name || !customer.email || !customer.phone) {
+    if (!customer || !customer.name || !customer.phone) {
       return res.status(400).json({
         success: false,
-        error: "Customer information (name, email, phone) is required",
+        error: "Customer information (name, phone) is required",
       });
     }
 
