@@ -367,6 +367,47 @@ const updateProduct = async (req, res) => {
 };
 
 /**
+ * Toggle product active status
+ * @route PATCH /api/products/:id/toggle-active
+ */
+const toggleProductActive = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isActive } = req.body;
+
+    if (typeof isActive !== 'boolean') {
+      return res.status(400).json({
+        success: false,
+        error: "isActive must be a boolean value",
+      });
+    }
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        error: "Product not found",
+      });
+    }
+
+    product.isActive = isActive;
+    await product.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Product ${isActive ? 'activated' : 'deactivated'} successfully`,
+      data: product,
+    });
+  } catch (error) {
+    console.error("Error toggling product active status:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message || "Failed to toggle product status",
+    });
+  }
+};
+
+/**
  * Delete product (soft delete by setting isActive to false)
  * @route DELETE /api/products/:id
  */
@@ -470,6 +511,7 @@ module.exports = {
   getAllProducts,
   getProductById,
   updateProduct,
+  toggleProductActive,
   deleteProduct,
   getProductsByCategory,
   getCategories,

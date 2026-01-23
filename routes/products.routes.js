@@ -21,6 +21,9 @@ router.get('/:id', productsController.getProductById);
 // Update product by ID (with optional image upload)
 router.put('/:id', upload.single('image'), productsController.updateProduct);
 
+// Toggle product active status
+router.patch('/:id/toggle-active', productsController.toggleProductActive);
+
 // Delete product (soft delete)
 router.delete('/:id', productsController.deleteProduct);
 
