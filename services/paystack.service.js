@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require("axios");
 
 /**
  * Verify a Paystack payment using the transaction reference
@@ -13,10 +13,15 @@ const verifyPayment = async (reference) => {
         headers: {
           Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
         },
-      }
+      },
     );
 
-    if (response.data.status === true && response.data.data.status === 'success') {
+    console.log("Paystack verification response:", response.data);
+
+    if (
+      response.data.status === true &&
+      response.data.data.status === "success"
+    ) {
       return {
         success: true,
         data: {
@@ -35,14 +40,17 @@ const verifyPayment = async (reference) => {
     } else {
       return {
         success: false,
-        message: 'Payment verification failed',
+        message: "Payment verification failed",
         status: response.data.data.status,
       };
     }
   } catch (error) {
-    console.error('Paystack verification error:', error.response?.data || error.message);
+    console.error(
+      "Paystack verification error:",
+      error.response?.data || error.message,
+    );
     throw new Error(
-      error.response?.data?.message || 'Failed to verify payment with Paystack'
+      error.response?.data?.message || "Failed to verify payment with Paystack",
     );
   }
 };

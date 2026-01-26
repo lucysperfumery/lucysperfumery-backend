@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema(
     },
     customer: {
       name: { type: String, required: true },
-      email: { type: String, required: false, default: "lucysperfumery@gmail.com" },
+      email: { type: String, required: false },
       phone: { type: String, required: true },
     },
     items: [

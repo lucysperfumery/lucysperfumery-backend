@@ -89,10 +89,16 @@ const createOrder = async (req, res) => {
     // Generate unique human-readable order number
     const orderNumber = await orderNumberService.generateOrderNumber();
 
+    // Generate unique placeholder email if customer didn't provide one
+    const customerData = { ...customer };
+    if (!customerData.email || customerData.email.trim() === "") {
+      customerData.email = `customer_${orderNumber}@noemail.lucysperfumery.com`;
+    }
+
     // Create new order with completed status (payment already verified)
     const order = await Order.create({
       orderNumber,
-      customer,
+      customer: customerData,
       items,
       totalAmount,
       currency: currency || "GHS",

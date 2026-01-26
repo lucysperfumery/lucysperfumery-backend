@@ -48,9 +48,19 @@ const sendNewOrderNotification = async (orderData) => {
 
     const itemsList = formatItemsForTelegram(orderData.items);
 
+    // Check if email is a placeholder
+    const isPlaceholderEmail =
+      !orderData.customer.email ||
+      orderData.customer.email === "lucysperfumery@gmail.com" ||
+      orderData.customer.email.endsWith("@noemail.lucysperfumery.com");
+
+    const displayEmail = isPlaceholderEmail
+      ? "No email provided"
+      : orderData.customer.email;
+
     const message = `
     *NEW ORDER RECEIVED!*
-    
+
 *Order Details:*
 Order ID: \`${orderData.orderNumber}\`
 Date: ${orderDate}
@@ -58,7 +68,7 @@ Status: Paid ✅
 
 *Customer Info:*
 Name: ${orderData.customer.name}
-Email: ${orderData.customer.email}
+Email: ${displayEmail}
 Phone: ${orderData.customer.phone}
 Delivery Method: ${
       orderData.metadata && orderData.metadata.deliveryMethod

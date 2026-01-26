@@ -62,10 +62,11 @@ const formatItemsList = (items) => {
  */
 const sendOrderConfirmation = async (orderData) => {
   try {
-    // Skip sending if no email provided or if using default email
+    // Skip sending if no email provided or if using placeholder email
     if (
       !orderData.customer.email ||
-      orderData.customer.email === "lucysperfumery@gmail.com"
+      orderData.customer.email === "lucysperfumery@gmail.com" ||
+      orderData.customer.email.endsWith("@noemail.lucysperfumery.com")
     ) {
       console.log(
         "Skipping customer confirmation email - no personal email provided",
@@ -134,11 +135,21 @@ const sendNewOrderAlert = async (orderData) => {
       },
     );
 
+    // Check if email is a placeholder
+    const isPlaceholderEmail =
+      !orderData.customer.email ||
+      orderData.customer.email === "lucysperfumery@gmail.com" ||
+      orderData.customer.email.endsWith("@noemail.lucysperfumery.com");
+
+    const displayEmail = isPlaceholderEmail
+      ? "No email provided"
+      : orderData.customer.email;
+
     const html = loadTemplate("new-order", {
       orderId: orderData.orderNumber,
       orderDate: orderDate,
       customerName: orderData.customer.name,
-      customerEmail: orderData.customer.email,
+      customerEmail: displayEmail,
       customerPhone: orderData.customer.phone,
       itemsList: itemsList,
       totalAmount: orderData.totalAmount.toFixed(2),

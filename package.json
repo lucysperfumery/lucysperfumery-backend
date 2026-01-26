@@ -22,5 +22,8 @@
     "multer-storage-cloudinary": "^4.0.0",
     "node-telegram-bot-api": "^0.67.0",
     "nodemailer": "^7.0.12"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }
