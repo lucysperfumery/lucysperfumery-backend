@@ -1,17 +1,18 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const ordersController = require('../controllers/orders.controller');
 
-// Create a new order (pending payment)
-router.post('/', ordersController.createOrder);
+// PAYMENT SYSTEM DISABLED - NOW USING WHATSAPP ORDERING
+// All order creation routes have been removed
+// Orders are managed through WhatsApp conversations
 
-// Verify payment and complete order
-router.post('/verify', ordersController.verifyPayment);
+// NOTE: The archived orders.controller.js has been deleted
+// If you need order viewing functionality for admin purposes,
+// create a new read-only orders controller without payment logic
 
-// Get order by ID
-router.get('/:id', ordersController.getOrderById);
-
-// Get all orders (with pagination)
-router.get('/', ordersController.getAllOrders);
+// DISABLED ROUTES (payment-based ordering):
+// router.post('/', ordersController.createOrder);
+// router.post('/verify', ordersController.verifyPayment);
+// router.get("/:id", ordersController.getOrderById);
+// router.get("/", ordersController.getAllOrders);
 
 module.exports = router;

@@ -14,7 +14,7 @@ app.use(
     origin: "*",
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  })
+  }),
 );
 
 app.use(express.json());
@@ -38,7 +38,7 @@ const productsRoutes = require("./routes/products.routes");
 const uploadRoutes = require("./routes/upload.routes");
 
 // Use routes
-app.use("/api/orders", ordersRoutes);
+// app.use("/api/orders", ordersRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/upload", uploadRoutes);
 
